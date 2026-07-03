@@ -1,0 +1,19 @@
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+  padding: 20px 0;
+}
+
+.empty-menu {
+  text-align: center;
+  padding: 50px 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  color: #57606f;
+}
+
+.empty-menu h3 {
+  color: #2f3542;
+  margin-bottom: 10px;
+}

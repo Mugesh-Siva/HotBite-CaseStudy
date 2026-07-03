@@ -1,0 +1,66 @@
+.order-history-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.order-history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.history-title {
+  margin: 0;
+  color: #2f3542;
+  font-size: 1.8rem;
+}
+
+.order-filters {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 5px;
+}
+
+.filter-btn {
+  background: white;
+  border: 1px solid #dfe4ea;
+  padding: 8px 16px;
+  border-radius: 20px;
+  color: #57606f;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.filter-btn:hover {
+  border-color: #ff4757;
+  color: #ff4757;
+}
+
+.filter-btn.active {
+  background: #ff4757;
+  border-color: #ff4757;
+  color: white;
+  box-shadow: 0 2px 8px rgba(255, 71, 87, 0.3);
+}
+
+.no-orders {
+  text-align: center;
+  padding: 40px;
+  background: white;
+  border-radius: 12px;
+  color: #747d8c;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 600px) {
+  .order-history-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

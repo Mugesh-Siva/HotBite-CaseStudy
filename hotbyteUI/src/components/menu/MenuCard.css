@@ -1,0 +1,113 @@
+.menu-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.menu-image-container {
+  position: relative;
+  height: 200px;
+  width: 100%;
+}
+
+.menu-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.veg-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: white;
+}
+
+.veg-badge.veg {
+  background-color: #2ed573;
+}
+
+.veg-badge.non-veg {
+  background-color: #ff4757;
+}
+
+.menu-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.menu-title {
+  font-size: 1.25rem;
+  color: #2f3542;
+  margin: 0;
+  font-weight: 700;
+}
+
+.menu-price {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #ff4757;
+}
+
+.menu-description {
+  color: #747d8c;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 15px;
+  flex-grow: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.menu-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.menu-tag {
+  background: #f1f2f6;
+  color: #57606f;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.menu-tag.taste {
+  background: #fff0f0;
+  color: #ff6b6b;
+}
+
+.menu-footer {
+  margin-top: auto;
+}
+
+.add-to-cart-btn {
+  width: 100%;
+}

@@ -1,0 +1,64 @@
+.add-menu-container {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.dashboard-title {
+  margin-top: 0;
+  margin-bottom: 25px;
+  color: #2f3542;
+  font-size: 1.5rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.form-grid.three-cols {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.select-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.25rem;
+}
+
+.select-group label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #4a4a4a;
+  margin-bottom: 0.5rem;
+}
+
+.select-group select {
+  padding: 12px 15px;
+  border: 1px solid #e1e1e1;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #fcfcfc;
+  outline: none;
+  transition: all 0.3s ease;
+  appearance: none;
+}
+
+.select-group select:focus {
+  border-color: #ff6b6b;
+  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+}
+
+.submit-menu-btn {
+  margin-top: 15px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .form-grid, .form-grid.three-cols {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
