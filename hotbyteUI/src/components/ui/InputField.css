@@ -1,38 +1,39 @@
 .input-group {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1.25rem;
+  margin-bottom: 20px;
 }
 
 .input-label {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #4a4a4a;
-  margin-bottom: 0.5rem;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
 }
 
 .input-control {
-  padding: 12px 15px;
-  border: 1px solid #e1e1e1;
-  border-radius: 8px;
-  font-size: 1rem;
-  background-color: #fcfcfc;
-  transition: all 0.3s ease;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 15px;
+  background-color: var(--bg-main);
+  transition: all 0.2s ease;
   outline: none;
 }
 
 .input-control:focus {
-  border-color: #ff6b6b;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+  border-color: var(--primary);
+  background-color: var(--bg-card);
+  box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.1);
 }
 
 .input-error {
-  border-color: #e74c3c;
+  border-color: #dc2626;
+  background-color: #fef2f2;
 }
 
 .error-text {
-  color: #e74c3c;
-  font-size: 0.8rem;
-  margin-top: 0.25rem;
+  color: #dc2626;
+  font-size: 13px;
+  margin-top: 6px;
 }

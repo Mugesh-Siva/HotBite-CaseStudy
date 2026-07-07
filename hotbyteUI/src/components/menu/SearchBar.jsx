@@ -5,7 +5,7 @@ const SearchBar = ({ searchTerm, onSearchChange }) => {
   return (
     <div className="search-bar-container">
       <div className="search-input-wrapper">
-        <span className="search-icon">🔍</span>
+        <span className="search-icon">Search</span>
         <input
           type="text"
           className="search-input"

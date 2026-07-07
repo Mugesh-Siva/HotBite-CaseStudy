@@ -1,35 +1,80 @@
-import React from 'react';
+// Navbar - uses AuthContext for auth state and React Router for navigation
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import { useCart } from '../../context/CartContext';
+import { toast } from 'react-toastify';
 import './Navbar.css';
 
-const Navbar = ({ isAuthenticated, userRole, onLogout }) => {
+const Navbar = () => {
+  const { isAuthenticated, user, logout } = useAuth();
+  const { itemCount } = useCart();
+  const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const handleLogout = () => {
+    logout();
+    toast.info('You have been logged out');
+    navigate('/login');
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        <div className="navbar-brand">
+        {/* Brand */}
+        <Link to="/" className="navbar-brand">
           <span className="brand-hot">Hot</span><span className="brand-byte">Byte</span>
-        </div>
-        <div className="navbar-links">
-          <a href="/" className="nav-link">Home</a>
-          <a href="/menu" className="nav-link">Menu</a>
-          
+        </Link>
+
+        {/* Hamburger for mobile */}
+        <button
+          className="hamburger"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Toggle menu"
+        >
+          <span></span><span></span><span></span>
+        </button>
+
+        {/* Nav Links */}
+        <div className={`navbar-links ${menuOpen ? 'open' : ''}`}>
+          <Link to="/" className="nav-link" onClick={() => setMenuOpen(false)}>Home</Link>
+          <Link to="/menu" className="nav-link" onClick={() => setMenuOpen(false)}>Menu</Link>
+
           {isAuthenticated ? (
             <>
-              {userRole === 'RESTAURANT' && <a href="/restaurant-dashboard" className="nav-link">Dashboard</a>}
-              {userRole === 'ADMIN' && <a href="/admin-dashboard" className="nav-link">Admin Panel</a>}
-              {userRole === 'USER' && (
+              {/* Role-based links */}
+              {user?.roleName === 'RESTAURANT_OWNER' && (
+                <Link to="/restaurant-dashboard" className="nav-link" onClick={() => setMenuOpen(false)}>
+                  Dashboard
+                </Link>
+              )}
+              {user?.roleName === 'ADMIN' && (
+                <Link to="/admin-dashboard" className="nav-link" onClick={() => setMenuOpen(false)}>
+                  Admin Panel
+                </Link>
+              )}
+              {(user?.roleName === 'CUSTOMER' || user?.roleName === 'CUSTOMER_USER') && (
                 <>
-                  <a href="/orders" className="nav-link">Orders</a>
-                  <a href="/cart" className="nav-link cart-link">
-                    Cart <span className="cart-badge">0</span>
-                  </a>
+                  <Link to="/orders" className="nav-link" onClick={() => setMenuOpen(false)}>
+                    My Orders
+                  </Link>
+                  <Link to="/cart" className="nav-link cart-link" onClick={() => setMenuOpen(false)}>
+                    Cart
+                    {itemCount > 0 && <span className="cart-badge">{itemCount}</span>}
+                  </Link>
                 </>
               )}
-              <button className="nav-btn-logout" onClick={onLogout}>Logout</button>
+
+              {/* User greeting + Logout */}
+              <div className="user-info">
+                <span className="user-name">Hi, {user?.fullName?.split(' ')[0]}</span>
+                <button className="nav-btn-logout" onClick={handleLogout}>Logout</button>
+              </div>
             </>
           ) : (
             <div className="auth-buttons">
-              <a href="/login" className="nav-link">Login</a>
-              <a href="/register" className="nav-btn-register">Sign Up</a>
+              <Link to="/login" className="nav-link" onClick={() => setMenuOpen(false)}>Login</Link>
+              <Link to="/register" className="nav-btn-register" onClick={() => setMenuOpen(false)}>Sign Up</Link>
             </div>
           )}
         </div>

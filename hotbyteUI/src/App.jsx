@@ -1,122 +1,172 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+// App.jsx - Main application with routing
+// All routes are defined here with role-based protection
+
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import { AuthProvider } from './context/AuthContext';
+import { CartProvider } from './context/CartContext';
+import ProtectedRoute from './components/common/ProtectedRoute';
+
+import Navbar from './components/layout/Navbar';
+import Footer from './components/layout/Footer';
+
+// Pages
+import HomePage from './pages/HomePage';
+import MenuPage from './pages/MenuPage';
+import CartPage from './pages/CartPage';
+import CheckoutPage from './pages/CheckoutPage';
+import OrdersPage from './pages/OrdersPage';
+import RestaurantDashboardPage from './pages/RestaurantDashboardPage';
+import AdminDashboardPage from './pages/AdminDashboardPage';
+import AdminRestaurantsPage from './pages/admin/AdminRestaurantsPage';
+import AdminMenusPage from './pages/admin/AdminMenusPage';
+import AdminUsersPage from './pages/admin/AdminUsersPage';
+import AdminOrdersPage from './pages/admin/AdminOrdersPage';
+
+// Auth Pages (inside the component files)
+import Login from './components/auth/Login';
+import Register from './components/auth/Register';
+import OAuth2Callback from './components/auth/OAuth2Callback';
+
+import './index.css';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <AuthProvider>
+      <CartProvider>
+        <BrowserRouter>
+          {/* Toast notifications */}
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+            toastStyle={{
+              background: '#1a1a2e',
+              border: '1px solid rgba(255,107,53,0.2)',
+              color: '#fff',
+            }}
+          />
 
-      <div className="ticks"></div>
+          {/* Layout: Navbar + Page + Footer */}
+          <div className="app-wrapper">
+            <Navbar />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+            <main className="main-content">
+              <Routes>
+                {/* Public Routes */}
+                <Route path="/" element={<HomePage />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/menu" element={<MenuPage />} />
+                <Route path="/oauth2/callback" element={<OAuth2Callback />} />
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+                {/* Customer Protected Routes */}
+                <Route
+                  path="/cart"
+                  element={
+                    <ProtectedRoute>
+                      <CartPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/checkout"
+                  element={
+                    <ProtectedRoute>
+                      <CheckoutPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/orders"
+                  element={
+                    <ProtectedRoute>
+                      <OrdersPage />
+                    </ProtectedRoute>
+                  }
+                />
+
+                {/* Restaurant Owner Dashboard */}
+                <Route
+                  path="/restaurant-dashboard"
+                  element={
+                    <ProtectedRoute requiredRole="RESTAURANT_OWNER">
+                      <RestaurantDashboardPage />
+                    </ProtectedRoute>
+                  }
+                />
+
+                {/* Admin Dashboard */}
+                <Route
+                  path="/admin-dashboard"
+                  element={
+                    <ProtectedRoute requiredRole="ADMIN">
+                      <AdminDashboardPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/restaurants"
+                  element={
+                    <ProtectedRoute requiredRole="ADMIN">
+                      <AdminRestaurantsPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/menus"
+                  element={
+                    <ProtectedRoute requiredRole="ADMIN">
+                      <AdminMenusPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/users"
+                  element={
+                    <ProtectedRoute requiredRole="ADMIN">
+                      <AdminUsersPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/orders"
+                  element={
+                    <ProtectedRoute requiredRole="ADMIN">
+                      <AdminOrdersPage />
+                    </ProtectedRoute>
+                  }
+                />
+
+                {/* 404 Fallback */}
+                <Route
+                  path="*"
+                  element={
+                    <div style={{ textAlign: 'center', padding: '6rem 2rem', color: '#fff' }}>
+                      <h1 style={{ fontSize: '6rem', marginBottom: '1rem' }}>404</h1>
+                      <h2>Page Not Found</h2>
+                      <a href="/" style={{ color: '#ff6b35', fontSize: '1rem' }}>Go Home</a>
+                    </div>
+                  }
+                />
+              </Routes>
+            </main>
+
+            <Footer />
+          </div>
+        </BrowserRouter>
+      </CartProvider>
+    </AuthProvider>
+  );
 }
 
-export default App
+export default App;

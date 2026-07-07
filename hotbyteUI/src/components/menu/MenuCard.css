@@ -1,16 +1,18 @@
 .menu-card {
-  background: white;
-  border-radius: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .menu-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
 }
 
 .menu-image-container {
@@ -27,25 +29,26 @@
 
 .veg-badge {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: bold;
+  top: 12px;
+  right: 12px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
   color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 .veg-badge.veg {
-  background-color: #2ed573;
+  background-color: #16a34a; /* green-600 */
 }
 
 .veg-badge.non-veg {
-  background-color: #ff4757;
+  background-color: #dc2626; /* red-600 */
 }
 
 .menu-content {
-  padding: 20px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -55,27 +58,30 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
+  gap: 12px;
 }
 
 .menu-title {
-  font-size: 1.25rem;
-  color: #2f3542;
+  font-size: 18px;
+  color: var(--text-primary);
   margin: 0;
   font-weight: 700;
+  line-height: 1.3;
 }
 
 .menu-price {
-  font-size: 1.15rem;
+  font-size: 18px;
   font-weight: 800;
-  color: #ff4757;
+  color: var(--primary);
+  white-space: nowrap;
 }
 
 .menu-description {
-  color: #747d8c;
-  font-size: 0.9rem;
-  line-height: 1.5;
-  margin-bottom: 15px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 20px;
   flex-grow: 1;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -87,21 +93,23 @@
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .menu-tag {
-  background: #f1f2f6;
-  color: #57606f;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 0.75rem;
+  background: var(--bg-main);
+  color: var(--text-secondary);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
   font-weight: 600;
+  border: 1px solid var(--border);
 }
 
 .menu-tag.taste {
-  background: #fff0f0;
-  color: #ff6b6b;
+  background: #fff1f2;
+  color: #e11d48;
+  border-color: #fecdd3;
 }
 
 .menu-footer {

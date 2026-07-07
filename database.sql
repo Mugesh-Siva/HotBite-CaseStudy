@@ -78,6 +78,14 @@ CREATE TABLE menu_items (
     CONSTRAINT fk_menu_category FOREIGN KEY (category_id) REFERENCES categories(category_id) ON DELETE RESTRICT
 );
 
+CREATE TABLE menu_images (
+    image_id INT AUTO_INCREMENT PRIMARY KEY,
+    menu_item_id INT NOT NULL,
+    image_url VARCHAR(500) NOT NULL,
+    display_order INT DEFAULT 1,
+    CONSTRAINT fk_menuimage_menu FOREIGN KEY (menu_item_id) REFERENCES menu_items(menu_item_id) ON DELETE CASCADE
+);
+
 CREATE TABLE carts (
     cart_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL UNIQUE,
@@ -154,12 +162,12 @@ INSERT INTO roles (role_name, description) VALUES
 ('SUPPORT', 'Customer Support Staff');
 
 -- Users
-INSERT INTO users (role_id, full_name, email, password_hash, contact_number, gender, created_at, is_active) VALUES 
-(1, 'Alice Admin', 'alice.admin@hotbyte.com', 'hash1', '1112223333', 'Female', NOW(), TRUE),
-(2, 'Bob Customer', 'bob.customer@gmail.com', 'hash2', '2223334444', 'Male', NOW(), TRUE),
-(3, 'Charlie Owner', 'charlie.owner@gmail.com', 'hash3', '3334445555', 'Male', NOW(), TRUE),
-(4, 'Diana Delivery', 'diana.delivery@yahoo.com', 'hash4', '4445556666', 'Female', NOW(), TRUE),
-(5, 'Eve Support', 'eve.support@hotbyte.com', 'hash5', '5556667777', 'Female', NOW(), TRUE);
+INSERT INTO users (role_id, full_name, email, password_hash, contact_number, gender, is_active) VALUES
+(1, 'Admin User', 'admin@hotbyte.com', '$2a$10$MoxOHJ7PkMidUWC5KFjbCO5/fTiMVwQhy09AVEPzXHqqo0AE7oQ5C', '9999999999', 'Other', 1),
+(2, 'Customer John', 'john@gmail.com', '$2a$10$MoxOHJ7PkMidUWC5KFjbCO5/fTiMVwQhy09AVEPzXHqqo0AE7oQ5C', '9876543210', 'Male', 1),
+(3, 'Restaurant Owner Bob', 'bob@pizza.com', '$2a$10$MoxOHJ7PkMidUWC5KFjbCO5/fTiMVwQhy09AVEPzXHqqo0AE7oQ5C', '8888888888', 'Male', 1),
+(3, 'Restaurant Owner Alice', 'alice@burger.com', '$2a$10$MoxOHJ7PkMidUWC5KFjbCO5/fTiMVwQhy09AVEPzXHqqo0AE7oQ5C', '7777777777', 'Female', 1),
+(4, 'Delivery Guy Dave', 'dave@deliver.com', '$2a$10$MoxOHJ7PkMidUWC5KFjbCO5/fTiMVwQhy09AVEPzXHqqo0AE7oQ5C', '6666666666', 'Male', 1);
 
 -- User Addresses
 INSERT INTO user_addresses (user_id, address_line_1, city, state, zip_code, is_default) VALUES 
@@ -187,11 +195,26 @@ INSERT INTO restaurant_addresses (restaurant_id, address_line_1, address_line_2,
 
 -- Categories
 INSERT INTO categories (category_name, description) VALUES 
+('Breakfast', 'Morning meals to start the day'),
+('Lunch', 'Mid-day meals'),
+('Dinner', 'Evening meals'),
+('Appetizer', 'Starters and light bites'),
+('Main Course', 'Hearty and fulfilling main dishes'),
+('Dessert', 'Sweet treats and cakes'),
+('Burger', 'Juicy grilled burgers'),
 ('Pizza', 'Authentic Italian Pizzas'),
-('Burgers', 'Juicy grilled burgers'),
+('Italian', 'Pasta, pizzas, and Italian classics'),
+('Arabian', 'Shawarmas, kebabs, and Arabian delights'),
+('Chinese', 'Noodles, rice, and stir-fries'),
+('South Indian', 'Dosas, idlis, and traditional dishes'),
+('North Indian', 'Curries, naan, and tandoori specials'),
+('Beverages', 'Refreshing drinks and shakes'),
+('Fast Food', 'Quick and tasty meals'),
+('Snacks', 'Light bites for anytime'),
+('Vegetarian', 'Pure vegetarian meals'),
+('Non Vegetarian', 'Meat and poultry dishes'),
 ('Vegan', 'Healthy plant-based meals'),
-('Sushi', 'Fresh Japanese sushi'),
-('Desserts', 'Sweet treats and cakes');
+('Others', 'Miscellaneous items');
 
 -- Menu Items
 INSERT INTO menu_items (restaurant_id, category_id, item_name, description, price, discount_price, availability_time, dietary_info, taste_info, nutritional_info, is_out_of_stock, created_at) VALUES 

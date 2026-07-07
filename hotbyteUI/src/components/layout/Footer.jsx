@@ -1,4 +1,6 @@
+// Footer component
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Footer.css';
 
 const Footer = () => {
@@ -6,27 +8,26 @@ const Footer = () => {
     <footer className="footer">
       <div className="footer-container">
         <div className="footer-brand">
-          <h3><span className="brand-hot">Hot</span><span className="brand-byte-white">Byte</span></h3>
-          <p>Delivering hot and fresh food directly to your doorstep. Experience the best culinary delights.</p>
+          <span className="brand-hot">Hot</span><span className="brand-byte">Byte</span>
+          <p>Fast, fresh, and always delicious. Your favorite food, delivered.</p>
         </div>
         <div className="footer-links">
-          <h4>Quick Links</h4>
-          <ul>
-            <li><a href="/menu">Menu</a></li>
-            <li><a href="/about">About Us</a></li>
-            <li><a href="/contact">Contact</a></li>
-          </ul>
-        </div>
-        <div className="footer-links">
-          <h4>Legal</h4>
-          <ul>
-            <li><a href="/terms">Terms of Service</a></li>
-            <li><a href="/privacy">Privacy Policy</a></li>
-          </ul>
+          <div className="footer-col">
+            <h4>Quick Links</h4>
+            <Link to="/">Home</Link>
+            <Link to="/menu">Menu</Link>
+            <Link to="/cart">Cart</Link>
+            <Link to="/orders">My Orders</Link>
+          </div>
+          <div className="footer-col">
+            <h4>Account</h4>
+            <Link to="/login">Login</Link>
+            <Link to="/register">Sign Up</Link>
+          </div>
         </div>
       </div>
       <div className="footer-bottom">
-        <p>&copy; {new Date().getFullYear()} Hexaware Technologies Limited. All rights reserved.</p>
+        <p>© 2024 HotByte. Built with React + Spring Boot | Hexaware Technologies</p>
       </div>
     </footer>
   );

@@ -1,43 +1,42 @@
 .category-filter-container {
-  margin: 20px 0;
+  margin: 24px 0;
   width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: none; /* Firefox */
+  scrollbar-width: none;
 }
 
 .category-filter-container::-webkit-scrollbar {
-  display: none; /* Chrome, Safari and Opera */
+  display: none;
 }
 
 .category-scroll {
   display: flex;
   gap: 12px;
-  padding: 5px 2px;
+  padding: 4px 2px;
 }
 
 .category-btn {
-  padding: 8px 20px;
-  border-radius: 20px;
-  background-color: white;
-  border: 1px solid #dfe4ea;
-  color: #57606f;
+  padding: 10px 24px;
+  border-radius: 30px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
 }
 
 .category-btn:hover {
-  border-color: #ff4757;
-  color: #ff4757;
-  transform: translateY(-1px);
+  background-color: var(--bg-main);
+  border-color: #ccc;
 }
 
 .category-btn.active {
-  background-color: #ff4757;
-  border-color: #ff4757;
+  background-color: var(--primary);
+  border-color: var(--primary);
   color: white;
-  box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3);
+  box-shadow: var(--shadow-md);
 }
