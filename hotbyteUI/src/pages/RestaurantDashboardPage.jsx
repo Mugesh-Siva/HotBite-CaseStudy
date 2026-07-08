@@ -381,11 +381,9 @@ const RestaurantDashboardPage = () => {
                 <div className="field-group">
                   <label>Availability *</label>
                   <select name="availabilityTime" className="dash-input" value={formik.values.availabilityTime} onChange={formik.handleChange}>
-                    <option>All Day</option>
-                    <option>Breakfast</option>
-                    <option>Lunch</option>
+                    <option>Morning</option>
+                    <option>Afternoon</option>
                     <option>Dinner</option>
-                    <option>10:00-22:00</option>
                   </select>
                 </div>
                 <div className="field-group">

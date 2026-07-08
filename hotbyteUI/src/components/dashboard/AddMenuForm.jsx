@@ -100,9 +100,8 @@ const AddMenuForm = ({ onAddMenu }) => {
           <div className="select-group">
             <label>Availability Time</label>
             <select name="availabilityTime" value={formData.availabilityTime} onChange={handleChange}>
-              <option value="All Day">All Day</option>
-              <option value="Breakfast">Breakfast</option>
-              <option value="Lunch">Lunch</option>
+              <option value="Morning">Morning</option>
+              <option value="Afternoon">Afternoon</option>
               <option value="Dinner">Dinner</option>
             </select>
           </div>

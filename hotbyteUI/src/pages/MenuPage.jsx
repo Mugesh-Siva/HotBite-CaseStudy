@@ -45,21 +45,44 @@ const MenuPage = () => {
     fetchData();
   }, []);
 
-  // Filtering and sorting
-  const filteredItems = menuItems
-    .filter(item => {
-      const matchesSearch = item.itemName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                           item.description?.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesCategory = selectedCategory === 'All' ||
-        categories.find(c => c.categoryId === item.categoryId)?.categoryName === selectedCategory;
-      const matchesDiet = dietaryFilter === 'All' || item.dietaryInfo === dietaryFilter;
-      return matchesSearch && matchesCategory && matchesDiet && !item.isOutOfStock;
-    })
-    .sort((a, b) => {
-      if (sortBy === 'price-asc') return (a.discountPrice || a.price) - (b.discountPrice || b.price);
-      if (sortBy === 'price-desc') return (b.discountPrice || b.price) - (a.discountPrice || a.price);
-      return 0;
-    });
+  // Filtering and sorting (Simplified for Viva explanation)
+  const filteredItems = menuItems.filter(item => {
+    // 1. Search Filter (Check if name or description includes search text)
+    const searchLower = searchQuery.toLowerCase();
+    const nameMatch = item.itemName ? item.itemName.toLowerCase().includes(searchLower) : false;
+    const descMatch = item.description ? item.description.toLowerCase().includes(searchLower) : false;
+    const matchesSearch = searchLower === '' || nameMatch || descMatch;
+
+    // 2. Category Filter (Check if item belongs to the selected category OR its availability time matches)
+    let matchesCategory = true;
+    if (selectedCategory !== 'All') {
+      const categoryObj = categories.find(c => String(c.categoryId) === String(item.categoryId));
+      const catNameMatches = categoryObj ? (categoryObj.categoryName === selectedCategory) : false;
+      
+      // Also check if they typed the category name into the availabilityTime field!
+      const timeMatches = item.availabilityTime ? 
+        item.availabilityTime.toLowerCase().includes(selectedCategory.toLowerCase()) : false;
+        
+      matchesCategory = catNameMatches || timeMatches;
+    }
+
+    // 3. Dietary Filter (Check if item matches Veg/Non-Veg/etc)
+    let matchesDiet = true;
+    if (dietaryFilter !== 'All') {
+      matchesDiet = item.dietaryInfo ? item.dietaryInfo.toLowerCase() === dietaryFilter.toLowerCase() : false;
+    }
+
+    // Item must match all filters and be in stock
+    return matchesSearch && matchesCategory && matchesDiet && !item.isOutOfStock;
+  }).sort((a, b) => {
+    // Sorting logic
+    const priceA = a.discountPrice || a.price;
+    const priceB = b.discountPrice || b.price;
+    
+    if (sortBy === 'price-asc') return priceA - priceB;
+    if (sortBy === 'price-desc') return priceB - priceA;
+    return 0;
+  });
 
   const handleAddToCart = (item, e = null) => {
     if (e) e.stopPropagation();

@@ -23,6 +23,7 @@ const Navbar = () => {
       <div className="navbar-container">
         {/* Brand */}
         <Link to="/" className="navbar-brand">
+          <img src="/logo.png" alt="HotByte Logo" className="navbar-logo" style={{ height: '90px', marginRight: '10px' }} />
           <span className="brand-hot">Hot</span><span className="brand-byte">Byte</span>
         </Link>
 

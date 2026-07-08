@@ -19,51 +19,17 @@ const STATUS_COLORS = {
 // Delivery tracker steps
 const TRACKER_STEPS = ['Pending', 'Preparing', 'In Transit', 'Delivered'];
 
-/**
- * Safely parse a date from various Spring Boot formats:
- *  - ISO string:    "2025-07-07T10:30:00"
- *  - Array format:  [2025, 7, 7, 10, 30, 0]  (legacy / no Jackson config)
- *  - null / undefined → returns null
- */
-const parseDate = (raw) => {
-  if (!raw) return null;
-  // Java LocalDateTime array: [year, month, day, hour, min, sec, nano]
-  if (Array.isArray(raw)) {
-    const [y, mo, d, h = 0, mi = 0, s = 0] = raw;
-    // months in JS Date are 0-indexed
-    return new Date(y, mo - 1, d, h, mi, s);
+// Simple date formatter for Viva explanation
+const formatDate = (rawDate) => {
+  if (!rawDate) return 'N/A';
+  
+  // If Spring Boot sends an array [year, month, day, hour, minute]
+  if (Array.isArray(rawDate)) {
+    return new Date(rawDate[0], rawDate[1] - 1, rawDate[2], rawDate[3] || 0, rawDate[4] || 0).toLocaleString();
   }
-  // ISO string or timestamp number
-  const dt = new Date(raw);
-  return isNaN(dt.getTime()) ? null : dt;
-};
-
-/**
- * Format date in Indian Standard Time with user-friendly display.
- */
-const formatDateIST = (raw) => {
-  const dt = parseDate(raw);
-  if (!dt) return '—';
-  return dt.toLocaleString('en-IN', {
-    timeZone: 'Asia/Kolkata',
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: true,
-  });
-};
-
-const formatTimeIST = (raw) => {
-  const dt = parseDate(raw);
-  if (!dt) return '—';
-  return dt.toLocaleTimeString('en-IN', {
-    timeZone: 'Asia/Kolkata',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: true,
-  });
+  
+  // If Spring Boot sends a standard ISO string
+  return new Date(rawDate).toLocaleString();
 };
 
 // ─────────────────────────────────────────────
@@ -216,7 +182,7 @@ const OrdersPage = () => {
                         </span>
                       )}
                       <span className="order-date">
-                        Date: {formatDateIST(order.createdAt)}
+                        Date: {formatDate(order.createdAt)}
                       </span>
                     </div>
                     <span
@@ -266,7 +232,7 @@ const OrdersPage = () => {
                       <div className="order-detail-cell">
                         <span className="detail-label">Est. Delivery</span>
                         <span className="detail-value">
-                          {formatTimeIST(order.estimatedDeliveryTime)}
+                          {formatDate(order.estimatedDeliveryTime)}
                         </span>
                       </div>
                       <div className="order-detail-cell total-cell">

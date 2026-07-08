@@ -21,11 +21,11 @@ const HomePage = () => {
   useEffect(() => {
     getAllRestaurants()
       .then(res => setRestaurants(res.data.slice(0, 4)))
-      .catch(() => {});
+      .catch(() => { });
 
     getAllMenuItems()
       .then(res => setFeaturedItems(res.data.slice(0, 6)))
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   return (

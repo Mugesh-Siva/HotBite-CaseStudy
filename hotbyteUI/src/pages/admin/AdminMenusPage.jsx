@@ -398,7 +398,7 @@ const AdminMenusPage = () => {
                   </small>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '15px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '15px', marginBottom: '15px' }}>
                   <div>
                     <label style={{ display: 'block', marginBottom: '5px' }}>Dietary Info</label>
                     <select 
@@ -410,6 +410,18 @@ const AdminMenusPage = () => {
                       <option value="Non-Vegetarian">Non-Vegetarian</option>
                       <option value="Vegan">Vegan</option>
                       <option value="Pescatarian">Pescatarian</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', marginBottom: '5px' }}>Availability Time</label>
+                    <select 
+                      value={formData.availabilityTime}
+                      onChange={(e) => setFormData({...formData, availabilityTime: e.target.value})}
+                      style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border)' }}
+                    >
+                      <option value="Morning">Morning</option>
+                      <option value="Afternoon">Afternoon</option>
+                      <option value="Dinner">Dinner</option>
                     </select>
                   </div>
                   <div>
