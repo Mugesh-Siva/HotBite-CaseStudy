@@ -105,6 +105,7 @@ const RestaurantDashboardPage = () => {
       dietaryInfo: editingItem?.dietaryInfo || 'Vegetarian',
       tasteInfo: editingItem?.tasteInfo || 'Mild',
       nutritionalInfo: editingItem?.nutritionalInfo || '',
+      isOutOfStock: editingItem?.isOutOfStock || false,
     },
     validationSchema: menuSchema,
     onSubmit: async (values, { resetForm, setSubmitting }) => {
@@ -115,7 +116,7 @@ const RestaurantDashboardPage = () => {
           price: parseFloat(values.price),
           discountPrice: values.discountPrice ? parseFloat(values.discountPrice) : null,
           categoryId: parseInt(values.categoryId),
-          isOutOfStock: false,
+          isOutOfStock: values.isOutOfStock,
         };
 
         let savedItemId;
@@ -405,6 +406,18 @@ const RestaurantDashboardPage = () => {
                     <option>Fresh</option>
                   </select>
                 </div>
+              </div>
+
+              <div className="field-group" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px', marginTop: '10px', marginBottom: '20px' }}>
+                <input 
+                  type="checkbox" 
+                  name="isOutOfStock"
+                  id="isOutOfStock"
+                  checked={formik.values.isOutOfStock}
+                  onChange={formik.handleChange}
+                  style={{ width: '20px', height: '20px', cursor: 'pointer' }}
+                />
+                <label htmlFor="isOutOfStock" style={{ margin: 0, cursor: 'pointer', fontWeight: 'bold' }}>Mark as Out of Stock</label>
               </div>
 
               <div className="form-actions">
