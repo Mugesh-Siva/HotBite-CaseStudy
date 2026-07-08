@@ -69,32 +69,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Featured Restaurants */}
-      {restaurants.length > 0 && (
-        <section className="section section-dark">
-          <div className="container">
-            <h2 className="section-title">Popular Restaurants</h2>
-            <p className="section-subtitle">Top-rated places near you</p>
-            <div className="restaurants-grid">
-              {restaurants.map(r => (
-                <div key={r.restaurantId} className="restaurant-card">
-                  <div className="restaurant-img-placeholder">
-                    Image
-                  </div>
-                  <div className="restaurant-info">
-                    <h3>{r.restaurantName}</h3>
-                    <p className="restaurant-contact">Contact: {r.contactNumber}</p>
-                    <span className="restaurant-badge">
-                      {r.isActive ? 'Open' : 'Closed'}
-                    </span>
-                    <Link to="/menu" className="restaurant-order-btn">Order Now</Link>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+
 
       {/* Featured Menu Items */}
       {featuredItems.length > 0 && (
