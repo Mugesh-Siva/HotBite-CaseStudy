@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { getAllUsers, deleteUser } from '../../api/userApi';
-import { getAllRoles } from '../../api/roleApi';
+import { getAllUsers, deleteUser } from '../../services/userService';
+import { getAllRoles } from '../../services/roleService';
 import '../DashboardPage.css';
 
 const AdminUsersPage = () => {

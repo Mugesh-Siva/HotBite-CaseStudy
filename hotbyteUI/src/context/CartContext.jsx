@@ -1,7 +1,7 @@
 // CartContext - manages cart state (items, total) globally
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
-import { getAllCartItems, getAllCarts, addCartItem, updateCartItem, deleteCartItem, createCart } from '../api/cartApi';
+import { getAllCartItems, getAllCarts, addCartItem, updateCartItem, deleteCartItem, createCart } from '../services/cartService';
 
 const CartContext = createContext(null);
 
@@ -84,11 +84,11 @@ export const CartProvider = ({ children }) => {
       let priceToUpdate = item.unitPrice;
       // Fallback if price is corrupted/null in older DB records
       if (!priceToUpdate) {
-        const { getMenuItemById } = await import('../api/menuApi');
+        const { getMenuItemById } = await import('../services/menuService');
         const menuRes = await getMenuItemById(item.menuItemId);
         priceToUpdate = menuRes.data.discountPrice || menuRes.data.price;
       }
-      
+
       await updateCartItem(cartItemId, {
         cartId,
         menuItemId: item.menuItemId,

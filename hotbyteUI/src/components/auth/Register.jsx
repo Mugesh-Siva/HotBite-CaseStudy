@@ -7,7 +7,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { registerUser } from '../../api/authApi';
+import { registerUser } from '../../services/authService';
 import { useAuth } from '../../context/AuthContext';
 import './Login.css';
 import './Register.css';
@@ -76,7 +76,7 @@ const Register = () => {
         }));
 
         toast.success(`Welcome to HotByte, ${data.fullName}!`);
-        
+
         navigate('/menu');
       } catch (err) {
         const message = err.response?.data?.error || 'Registration failed. Please try again.';

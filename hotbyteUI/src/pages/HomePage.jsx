@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getAllRestaurants } from '../api/restaurantApi';
-import { getAllMenuItems } from '../api/menuApi';
+import { getAllRestaurants } from '../services/restaurantService';
+import { getAllMenuItems } from '../services/menuService';
 import './HomePage.css';
 
 const CATEGORIES = [
@@ -44,20 +44,7 @@ const HomePage = () => {
             <Link to="/menu" className="btn-primary-lg">Browse Menu</Link>
             <Link to="/register" className="btn-secondary-lg">Join Free</Link>
           </div>
-          <div className="hero-stats">
-            <div className="stat">
-              <span className="stat-num">500+</span>
-              <span className="stat-label">Restaurants</span>
-            </div>
-            <div className="stat">
-              <span className="stat-num">50K+</span>
-              <span className="stat-label">Happy Users</span>
-            </div>
-            <div className="stat">
-              <span className="stat-num">30 min</span>
-              <span className="stat-label">Avg Delivery</span>
-            </div>
-          </div>
+
         </div>
 
       </section>

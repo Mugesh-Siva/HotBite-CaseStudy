@@ -1,8 +1,8 @@
 // OrdersPage - User's order history with live status updates (polls every 15s)
 import React, { useEffect, useState, useCallback } from 'react';
-import { getAllOrders, getAllOrderItems } from '../api/orderApi';
-import { getAllMenuItems } from '../api/menuApi';
-import { getAllRestaurants } from '../api/restaurantApi';
+import { getAllOrders, getAllOrderItems } from '../services/orderService';
+import { getAllMenuItems } from '../services/menuService';
+import { getAllRestaurants } from '../services/restaurantService';
 import { useAuth } from '../context/AuthContext';
 import './OrdersPage.css';
 

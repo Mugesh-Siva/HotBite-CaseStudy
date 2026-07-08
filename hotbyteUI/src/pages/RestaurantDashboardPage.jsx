@@ -7,9 +7,9 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
-import { getAllMenuItems, createMenuItem, updateMenuItem, deleteMenuItem, getAllCategories, uploadMenuImages } from '../api/menuApi';
-import { getAllOrders, updateOrder } from '../api/orderApi';
-import { getAllRestaurants } from '../api/restaurantApi';
+import { getAllMenuItems, createMenuItem, updateMenuItem, deleteMenuItem, getAllCategories, uploadMenuImages } from '../services/menuService';
+import { getAllOrders, updateOrder } from '../services/orderService';
+import { getAllRestaurants } from '../services/restaurantService';
 import './DashboardPage.css';
 
 /**

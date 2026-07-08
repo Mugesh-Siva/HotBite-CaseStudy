@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { getAllRestaurants, createRestaurant, updateRestaurant, deleteRestaurant } from '../../api/restaurantApi';
-import { registerUser } from '../../api/authApi';
-import { getAllRoles } from '../../api/roleApi';
+import { getAllRestaurants, createRestaurant, updateRestaurant, deleteRestaurant } from '../../services/restaurantService';
+import { registerUser } from '../../services/authService';
+import { getAllRoles } from '../../services/roleService';
 import '../DashboardPage.css';
 
 const AdminRestaurantsPage = () => {

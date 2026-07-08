@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { getAllMenuItems, createMenuItem, updateMenuItem, deleteMenuItem, getAllCategories, uploadMenuImages, deleteMenuImage } from '../../api/menuApi';
-import { getAllRestaurants } from '../../api/restaurantApi';
+import { getAllMenuItems, createMenuItem, updateMenuItem, deleteMenuItem, getAllCategories, uploadMenuImages, deleteMenuImage } from '../../services/menuService';
+import { getAllRestaurants } from '../../services/restaurantService';
 import '../DashboardPage.css';
 
 const AdminMenusPage = () => {

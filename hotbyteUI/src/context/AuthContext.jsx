@@ -3,7 +3,7 @@
 // Provides: login(), logout(), isAuthenticated, user, token
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { loginUser, getCurrentUser } from '../api/authApi';
+import { loginUser, getCurrentUser } from '../services/authService';
 
 const AuthContext = createContext(null);
 

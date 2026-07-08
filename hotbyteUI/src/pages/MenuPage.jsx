@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { getAllMenuItems, getAllCategories } from '../api/menuApi';
+import { getAllMenuItems, getAllCategories } from '../services/menuService';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import './MenuPage.css';
@@ -58,11 +58,11 @@ const MenuPage = () => {
     if (selectedCategory !== 'All') {
       const categoryObj = categories.find(c => String(c.categoryId) === String(item.categoryId));
       const catNameMatches = categoryObj ? (categoryObj.categoryName === selectedCategory) : false;
-      
+
       // Also check if they typed the category name into the availabilityTime field!
-      const timeMatches = item.availabilityTime ? 
+      const timeMatches = item.availabilityTime ?
         item.availabilityTime.toLowerCase().includes(selectedCategory.toLowerCase()) : false;
-        
+
       matchesCategory = catNameMatches || timeMatches;
     }
 
@@ -78,7 +78,7 @@ const MenuPage = () => {
     // Sorting logic
     const priceA = a.discountPrice || a.price;
     const priceB = b.discountPrice || b.price;
-    
+
     if (sortBy === 'price-asc') return priceA - priceB;
     if (sortBy === 'price-desc') return priceB - priceA;
     return 0;
@@ -185,18 +185,18 @@ const MenuPage = () => {
         ) : (
           <div className="menu-grid">
             {filteredItems.map(item => (
-              <div 
-                key={item.menuItemId} 
+              <div
+                key={item.menuItemId}
                 className="menu-item-card"
                 onClick={() => { setSelectedItem(item); setCurrentImageIndex(0); }}
                 style={{ cursor: 'pointer' }}
               >
                 <div className="menu-item-img">
                   {item.images && item.images.length > 0 ? (
-                    <img 
-                      src={`http://localhost:8080${item.images[0].imageUrl}`} 
-                      alt={item.itemName} 
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                    <img
+                      src={`http://localhost:8080${item.images[0].imageUrl}`}
+                      alt={item.itemName}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
                   ) : (
                     <div className="placeholder-img">No Image</div>
@@ -251,17 +251,17 @@ const MenuPage = () => {
             <div className="item-modal-left">
               {selectedItem.images && selectedItem.images.length > 0 ? (
                 <div className="modal-gallery">
-                  <img 
-                    src={`http://localhost:8080${selectedItem.images[currentImageIndex].imageUrl}`} 
-                    alt={selectedItem.itemName} 
-                    className="item-modal-img" 
+                  <img
+                    src={`http://localhost:8080${selectedItem.images[currentImageIndex].imageUrl}`}
+                    alt={selectedItem.itemName}
+                    className="item-modal-img"
                   />
                   {selectedItem.images.length > 1 && (
                     <div className="gallery-thumbnails">
                       {selectedItem.images.map((img, idx) => (
-                        <img 
+                        <img
                           key={idx}
-                          src={`http://localhost:8080${img.imageUrl}`} 
+                          src={`http://localhost:8080${img.imageUrl}`}
                           alt="thumbnail"
                           className={`thumbnail ${currentImageIndex === idx ? 'active' : ''}`}
                           onClick={() => setCurrentImageIndex(idx)}
@@ -278,36 +278,36 @@ const MenuPage = () => {
               <div className="item-modal-header">
                 <h2 className="item-modal-name">{selectedItem.itemName}</h2>
                 <div className="item-modal-price">
-                   {selectedItem.discountPrice ? (
-                     <>
-                       <span>₹{selectedItem.discountPrice}</span>
-                       <span style={{textDecoration: 'line-through', color: '#9ca3af', fontSize: '14px', marginLeft: '8px'}}>₹{selectedItem.price}</span>
-                     </>
-                   ) : (
-                     <span>₹{selectedItem.price}</span>
-                   )}
+                  {selectedItem.discountPrice ? (
+                    <>
+                      <span>₹{selectedItem.discountPrice}</span>
+                      <span style={{ textDecoration: 'line-through', color: '#9ca3af', fontSize: '14px', marginLeft: '8px' }}>₹{selectedItem.price}</span>
+                    </>
+                  ) : (
+                    <span>₹{selectedItem.price}</span>
+                  )}
                 </div>
                 <div className="menu-item-tags">
-                  <span className={`diet-badge ${selectedItem.dietaryInfo === 'Vegetarian' || selectedItem.dietaryInfo === 'Vegan' ? 'veg' : 'non-veg'}`} style={{position: 'static', boxShadow: 'none', border: '1px solid #e5e7eb'}}>
+                  <span className={`diet-badge ${selectedItem.dietaryInfo === 'Vegetarian' || selectedItem.dietaryInfo === 'Vegan' ? 'veg' : 'non-veg'}`} style={{ position: 'static', boxShadow: 'none', border: '1px solid #e5e7eb' }}>
                     {selectedItem.dietaryInfo === 'Vegetarian' || selectedItem.dietaryInfo === 'Vegan' ? 'Veg' : 'Non-Veg'}
                   </span>
                   {getCategoryName(selectedItem.categoryId) && <span className="tag">{getCategoryName(selectedItem.categoryId)}</span>}
                   {selectedItem.tasteInfo && <span className="tag taste">{selectedItem.tasteInfo}</span>}
                 </div>
               </div>
-              
+
               <p className="item-modal-desc">{selectedItem.description || 'No description available for this delicious item.'}</p>
-              
+
               {selectedItem.nutritionalInfo && (
                 <div className="item-modal-nutrition">
                   <h4>Nutritional Information</h4>
                   <p>{selectedItem.nutritionalInfo}</p>
                 </div>
               )}
-              
+
               <div className="item-modal-actions">
-                <button 
-                  className="add-cart-btn" 
+                <button
+                  className="add-cart-btn"
                   onClick={() => {
                     handleAddToCart(selectedItem);
                     setSelectedItem(null);

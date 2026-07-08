@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import { getAllMenuItems } from '../api/menuApi';
+import { getAllMenuItems } from '../services/menuService';
 import './CartPage.css';
 
 const CartPage = () => {
@@ -74,34 +74,35 @@ const CartPage = () => {
               const menuItem = getMenuItem(item.menuItemId);
               const itemPrice = item.unitPrice || (menuItem ? (menuItem.discountPrice || menuItem.price) : 0);
               return (
-              <div key={item.cartItemId} className="cart-item-row">
-                <div className="cart-item-emoji">
-                  {menuItem ? (menuItem.dietaryInfo === 'Vegan' ? 'Vegan' : menuItem.dietaryInfo === 'Vegetarian' ? 'Veg' : 'Non-Veg') : 'Item'}
+                <div key={item.cartItemId} className="cart-item-row">
+                  <div className="cart-item-emoji">
+                    {menuItem ? (menuItem.dietaryInfo === 'Vegan' ? 'Vegan' : menuItem.dietaryInfo === 'Vegetarian' ? 'Veg' : 'Non-Veg') : 'Item'}
+                  </div>
+                  <div className="cart-item-info">
+                    <h4>{menuItem ? menuItem.itemName : `Menu Item #${item.menuItemId}`}</h4>
+                    <p className="cart-item-unit">₹{itemPrice} each</p>
+                  </div>
+                  <div className="qty-control">
+                    <button
+                      className="qty-btn"
+                      onClick={() => updateQuantity(item.cartItemId, item.quantity - 1)}
+                      disabled={item.quantity <= 1}
+                    >-</button>
+                    <span className="qty-num">{item.quantity}</span>
+                    <button
+                      className="qty-btn"
+                      onClick={() => updateQuantity(item.cartItemId, item.quantity + 1)}
+                    >+</button>
+                  </div>
+                  <div className="cart-item-subtotal">
+                    ₹{(itemPrice * item.quantity).toFixed(2)}
+                  </div>
+                  <button className="remove-btn" onClick={() => removeFromCart(item.cartItemId)}>
+                    Remove
+                  </button>
                 </div>
-                <div className="cart-item-info">
-                  <h4>{menuItem ? menuItem.itemName : `Menu Item #${item.menuItemId}`}</h4>
-                  <p className="cart-item-unit">₹{itemPrice} each</p>
-                </div>
-                <div className="qty-control">
-                  <button
-                    className="qty-btn"
-                    onClick={() => updateQuantity(item.cartItemId, item.quantity - 1)}
-                    disabled={item.quantity <= 1}
-                  >-</button>
-                  <span className="qty-num">{item.quantity}</span>
-                  <button
-                    className="qty-btn"
-                    onClick={() => updateQuantity(item.cartItemId, item.quantity + 1)}
-                  >+</button>
-                </div>
-                <div className="cart-item-subtotal">
-                  ₹{(itemPrice * item.quantity).toFixed(2)}
-                </div>
-                <button className="remove-btn" onClick={() => removeFromCart(item.cartItemId)}>
-                  Remove
-                </button>
-              </div>
-            )})}
+              )
+            })}
           </div>
 
           {/* Order Summary */}
@@ -115,7 +116,7 @@ const CartPage = () => {
             <div className="summary-row">
               <span>Delivery Fee</span>
               <span>
-                {deliveryFee === 0 ? <span style={{color: 'var(--primary)', fontWeight: 'bold'}}>Free</span> : `₹${deliveryFee.toFixed(2)}`}
+                {deliveryFee === 0 ? <span style={{ color: 'var(--primary)', fontWeight: 'bold' }}>Free</span> : `₹${deliveryFee.toFixed(2)}`}
               </span>
             </div>
             <div className="summary-divider" />

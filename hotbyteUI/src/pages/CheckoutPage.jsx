@@ -7,9 +7,9 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
-import { createOrder, addOrderItem } from '../api/orderApi';
-import { addUserAddress, getAllUserAddresses } from '../api/userApi';
-import { getAllMenuItems } from '../api/menuApi';
+import { createOrder, addOrderItem } from '../services/orderService';
+import { addUserAddress, getAllUserAddresses } from '../services/userService';
+import { getAllMenuItems } from '../services/menuService';
 import './CheckoutPage.css';
 
 // Yup validation schema
@@ -58,10 +58,10 @@ const CheckoutPage = () => {
   const { user } = useAuth();
   const { cartItems, clearCart, cartId } = useCart();
   const navigate = useNavigate();
-  
+
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [orderId, setOrderId] = useState(null);
-  
+
   const [menuItems, setMenuItems] = useState([]);
   const [savedAddresses, setSavedAddresses] = useState([]);
   const [dataLoading, setDataLoading] = useState(true);
@@ -74,11 +74,11 @@ const CheckoutPage = () => {
           getAllUserAddresses()
         ]);
         setMenuItems(menuRes.data);
-        
+
         // Filter addresses for current user
         if (addressRes.data) {
-           const myAddresses = addressRes.data.filter(a => a.userId === user?.userId);
-           setSavedAddresses(myAddresses);
+          const myAddresses = addressRes.data.filter(a => a.userId === user?.userId);
+          setSavedAddresses(myAddresses);
         }
       } catch (err) {
         console.error("Failed to load checkout data", err);
@@ -185,7 +185,7 @@ const CheckoutPage = () => {
   if (dataLoading) {
     return (
       <div className="checkout-page">
-        <div className="loading-text" style={{textAlign: 'center', padding: '50px', fontSize: '1.2rem', color: '#666'}}>
+        <div className="loading-text" style={{ textAlign: 'center', padding: '50px', fontSize: '1.2rem', color: '#666' }}>
           Preparing checkout...
         </div>
       </div>
@@ -225,7 +225,7 @@ const CheckoutPage = () => {
             {/* Shipping Address */}
             <div className="form-section">
               <h3 className="form-section-title">Delivery Address</h3>
-              
+
               {savedAddresses.length > 0 && (
                 <div className="saved-addresses">
                   {savedAddresses.map(address => (
@@ -243,7 +243,7 @@ const CheckoutPage = () => {
                       </div>
                     </label>
                   ))}
-                  
+
                   <label className={`address-option ${formik.values.selectedAddressId === 'new' ? 'selected' : ''}`}>
                     <input
                       type="radio"
@@ -253,7 +253,7 @@ const CheckoutPage = () => {
                       onChange={formik.handleChange}
                     />
                     <div className="address-details">
-                      <p style={{fontWeight: 'bold'}}>+ Add New Address</p>
+                      <p style={{ fontWeight: 'bold' }}>+ Add New Address</p>
                     </div>
                   </label>
                 </div>
@@ -408,16 +408,17 @@ const CheckoutPage = () => {
               const menuItem = getMenuItem(item.menuItemId);
               const itemPrice = item.unitPrice || (menuItem ? (menuItem.discountPrice || menuItem.price) : 0);
               return (
-              <div key={item.cartItemId} className="summary-item">
-                <span>{item.quantity}x {menuItem ? menuItem.itemName : `Item #${item.menuItemId}`}</span>
-                <span>₹{(itemPrice * item.quantity).toFixed(2)}</span>
-              </div>
-            )})}
+                <div key={item.cartItemId} className="summary-item">
+                  <span>{item.quantity}x {menuItem ? menuItem.itemName : `Item #${item.menuItemId}`}</span>
+                  <span>₹{(itemPrice * item.quantity).toFixed(2)}</span>
+                </div>
+              )
+            })}
             <div className="summary-sep" />
             <div className="summary-row"><span>Subtotal</span><span>₹{activeSubtotal.toFixed(2)}</span></div>
             <div className="summary-row">
               <span>Delivery</span>
-              <span>{deliveryFee === 0 ? <span style={{color: 'var(--primary)', fontWeight: 'bold'}}>Free</span> : `₹${deliveryFee.toFixed(2)}`}</span>
+              <span>{deliveryFee === 0 ? <span style={{ color: 'var(--primary)', fontWeight: 'bold' }}>Free</span> : `₹${deliveryFee.toFixed(2)}`}</span>
             </div>
             <div className="summary-sep" />
             <div className="summary-row total"><span>Total</span><span>₹{grandTotal.toFixed(2)}</span></div>
