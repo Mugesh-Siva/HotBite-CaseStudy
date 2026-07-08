@@ -16,15 +16,6 @@ const STATUS_COLORS = {
   'Cancelled':  { bg: '#fff1f2', color: '#be123c', border: '#fecdd3' },
 };
 
-const STATUS_ICONS = {
-  'Pending':    '🕐',
-  'Processing': '⚙️',
-  'Preparing':  '🍳',
-  'In Transit': '🚴',
-  'Delivered':  '✅',
-  'Cancelled':  '❌',
-};
-
 // Delivery tracker steps
 const TRACKER_STEPS = ['Pending', 'Preparing', 'In Transit', 'Delivered'];
 
@@ -168,7 +159,7 @@ const OrdersPage = () => {
           <div className="orders-meta">
             {lastUpdated && (
               <span className="last-updated">
-                🔄 Updated {lastUpdated.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                Updated {lastUpdated.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit' })}
               </span>
             )}
             <span className="order-count-badge">{orders.length} Order{orders.length !== 1 ? 's' : ''}</span>
@@ -183,7 +174,7 @@ const OrdersPage = () => {
               className={`status-filter-btn ${filterStatus === s ? 'active' : ''}`}
               onClick={() => setFilterStatus(s)}
             >
-              {s !== 'All' && STATUS_ICONS[s] ? `${STATUS_ICONS[s]} ` : ''}{s}
+              {s}
               {s !== 'All' && (
                 <span className="filter-count">
                   {orders.filter(o => o.orderStatus === s).length}
@@ -196,7 +187,6 @@ const OrdersPage = () => {
         {/* ── Empty state ─────────────────────────────────────────────── */}
         {filteredOrders.length === 0 ? (
           <div className="no-orders">
-            <div className="no-orders-icon">🛒</div>
             <h3>No orders found</h3>
             <p>
               {filterStatus === 'All'
@@ -222,11 +212,11 @@ const OrdersPage = () => {
                       <span className="order-id">Order #{order.orderId}</span>
                       {restaurant && (
                         <span className="order-restaurant">
-                          🍽️ {restaurant.name}
+                          {restaurant.name}
                         </span>
                       )}
                       <span className="order-date">
-                        📅 {formatDateIST(order.createdAt)}
+                        Date: {formatDateIST(order.createdAt)}
                       </span>
                     </div>
                     <span
@@ -237,7 +227,7 @@ const OrdersPage = () => {
                         border:     `1px solid ${statusStyle.border}`,
                       }}
                     >
-                      {STATUS_ICONS[order.orderStatus]} {order.orderStatus}
+                      {order.orderStatus}
                     </span>
                   </div>
 
@@ -247,7 +237,7 @@ const OrdersPage = () => {
                     {/* Food items */}
                     {myItems.length > 0 && (
                       <div className="ordered-items-section">
-                        <h4 className="section-label">🛍️ Items Ordered</h4>
+                        <h4 className="section-label">Items Ordered</h4>
                         <div className="ordered-items-list">
                           {myItems.map(oi => {
                             const menuItem = getMenuItem(oi.menuItemId);
@@ -291,7 +281,7 @@ const OrdersPage = () => {
                   {/* ── Delivery Progress Tracker ─────────── */}
                   {!isCancelled ? (
                     <div className="delivery-tracker">
-                      <h4 className="section-label">📦 Order Progress</h4>
+                      <h4 className="section-label">Order Progress</h4>
                       <div className="tracker-steps">
                         {TRACKER_STEPS.map((step, idx) => {
                           const isCompleted = idx <= trackerIdx;
@@ -314,7 +304,7 @@ const OrdersPage = () => {
                     </div>
                   ) : (
                     <div className="cancelled-banner">
-                      ❌ This order was cancelled
+                      This order was cancelled
                     </div>
                   )}
                 </div>

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { getAllRestaurants, createRestaurant, updateRestaurant, deleteRestaurant } from '../../api/restaurantApi';
-import { getAllUsers } from '../../api/userApi';
+import { registerUser } from '../../api/authApi';
+import { getAllRoles } from '../../api/roleApi';
 import '../DashboardPage.css';
 
 const AdminRestaurantsPage = () => {
   const [restaurants, setRestaurants] = useState([]);
-  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -15,7 +15,9 @@ const AdminRestaurantsPage = () => {
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({
     restaurantName: '',
-    ownerUserId: '',
+    fullName: '',
+    email: '',
+    password: '',
     contactNumber: '',
     isActive: true
   });
@@ -27,12 +29,8 @@ const AdminRestaurantsPage = () => {
   const loadData = async () => {
     setLoading(true);
     try {
-      const [restRes, usersRes] = await Promise.all([
-        getAllRestaurants(),
-        getAllUsers()
-      ]);
+      const restRes = await getAllRestaurants();
       setRestaurants(restRes.data);
-      setUsers(usersRes.data);
     } catch (err) {
       toast.error('Failed to load data');
     } finally {
@@ -56,7 +54,9 @@ const AdminRestaurantsPage = () => {
       setEditingId(restaurant.restaurantId);
       setFormData({
         restaurantName: restaurant.restaurantName,
-        ownerUserId: restaurant.ownerUserId,
+        fullName: '',
+        email: '',
+        password: '',
         contactNumber: restaurant.contactNumber,
         isActive: restaurant.isActive
       });
@@ -64,7 +64,9 @@ const AdminRestaurantsPage = () => {
       setEditingId(null);
       setFormData({
         restaurantName: '',
-        ownerUserId: '',
+        fullName: '',
+        email: '',
+        password: '',
         contactNumber: '',
         isActive: true
       });
@@ -79,23 +81,66 @@ const AdminRestaurantsPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.restaurantName || !formData.ownerUserId || !formData.contactNumber) {
-      toast.error('Please fill in all required fields');
-      return;
-    }
 
     try {
       if (editingId) {
-        await updateRestaurant(editingId, formData);
+        if (!formData.restaurantName || !formData.contactNumber) {
+          toast.error('Please fill in all required fields');
+          return;
+        }
+        await updateRestaurant(editingId, {
+          restaurantName: formData.restaurantName,
+          contactNumber: formData.contactNumber,
+          isActive: formData.isActive
+        });
         toast.success('Restaurant updated successfully');
       } else {
-        await createRestaurant(formData);
-        toast.success('Restaurant created successfully');
+        if (!formData.restaurantName || !formData.fullName || !formData.email || !formData.password || !formData.contactNumber) {
+          toast.error('Please fill in all required fields');
+          return;
+        }
+
+        const roleRes = await getAllRoles();
+        let restaurantRole = roleRes.data.find(r => r.roleName && r.roleName.toUpperCase() === 'RESTAURANT');
+        if (!restaurantRole) {
+            restaurantRole = roleRes.data.find(r => r.roleName && r.roleName.toLowerCase().includes('restaurant'));
+        }
+        if (!restaurantRole) {
+            // Fallback: commonly 2 is Restaurant
+            const fallbackRole = roleRes.data.find(r => r.roleId === 2);
+            if (fallbackRole) {
+              restaurantRole = fallbackRole;
+            } else {
+              toast.error("Restaurant role not found in database. Roles available: " + roleRes.data.map(r => r.roleName).join(", "));
+              return;
+            }
+        }
+
+        const userPayload = {
+            roleId: restaurantRole.roleId,
+            fullName: formData.fullName,
+            email: formData.email,
+            password: formData.password,
+            contactNumber: formData.contactNumber,
+            gender: 'Not Specified'
+        };
+        const authRes = await registerUser(userPayload);
+        const newUserId = authRes.data.userId;
+
+        const restPayload = {
+            restaurantName: formData.restaurantName,
+            ownerUserId: newUserId,
+            contactNumber: formData.contactNumber,
+            isActive: formData.isActive
+        };
+        await createRestaurant(restPayload);
+
+        toast.success('Restaurant and owner account created successfully');
       }
       handleCloseModal();
       loadData();
     } catch (err) {
-      toast.error(err.response?.data || 'Operation failed');
+      toast.error(err.response?.data?.error || err.response?.data || 'Operation failed');
     }
   };
 
@@ -177,12 +222,14 @@ const AdminRestaurantsPage = () => {
           </table>
         </div>
 
-        {/* Simple Bootstrap-style Modal */}
+        {/* Modal */}
         {showModal && (
           <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
             <div style={{ background: 'var(--bg-card)', padding: '30px', borderRadius: '12px', width: '100%', maxWidth: '500px', maxHeight: '90vh', overflowY: 'auto' }}>
               <h2 style={{ marginBottom: '20px' }}>{editingId ? 'Edit Restaurant' : 'Add New Restaurant'}</h2>
               <form onSubmit={handleSubmit}>
+                
+                <h4 style={{ marginBottom: '10px', borderBottom: '1px solid var(--border)', paddingBottom: '5px' }}>Restaurant Details</h4>
                 <div style={{ marginBottom: '15px' }}>
                   <label style={{ display: 'block', marginBottom: '5px' }}>Restaurant Name *</label>
                   <input 
@@ -193,22 +240,9 @@ const AdminRestaurantsPage = () => {
                     required
                   />
                 </div>
+                
                 <div style={{ marginBottom: '15px' }}>
-                  <label style={{ display: 'block', marginBottom: '5px' }}>Owner *</label>
-                  <select 
-                    value={formData.ownerUserId}
-                    onChange={(e) => setFormData({...formData, ownerUserId: e.target.value})}
-                    style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border)' }}
-                    required
-                  >
-                    <option value="">Select an Owner</option>
-                    {users.map(u => (
-                      <option key={u.userId} value={u.userId}>#{u.userId} - {u.fullName} ({u.email})</option>
-                    ))}
-                  </select>
-                </div>
-                <div style={{ marginBottom: '15px' }}>
-                  <label style={{ display: 'block', marginBottom: '5px' }}>Contact Number *</label>
+                  <label style={{ display: 'block', marginBottom: '5px' }}>Restaurant Contact Number *</label>
                   <input 
                     type="text" 
                     value={formData.contactNumber}
@@ -217,7 +251,45 @@ const AdminRestaurantsPage = () => {
                     required
                   />
                 </div>
-                <div style={{ marginBottom: '25px', display: 'flex', alignItems: 'center' }}>
+
+                {!editingId && (
+                  <>
+                    <h4 style={{ marginBottom: '10px', marginTop: '20px', borderBottom: '1px solid var(--border)', paddingBottom: '5px' }}>Owner Account Details</h4>
+                    <div style={{ marginBottom: '15px' }}>
+                      <label style={{ display: 'block', marginBottom: '5px' }}>Owner Full Name *</label>
+                      <input 
+                        type="text" 
+                        value={formData.fullName}
+                        onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+                        style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border)' }}
+                        required={!editingId}
+                      />
+                    </div>
+                    <div style={{ marginBottom: '15px' }}>
+                      <label style={{ display: 'block', marginBottom: '5px' }}>Owner Email *</label>
+                      <input 
+                        type="email" 
+                        value={formData.email}
+                        onChange={(e) => setFormData({...formData, email: e.target.value})}
+                        style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border)' }}
+                        required={!editingId}
+                      />
+                    </div>
+                    <div style={{ marginBottom: '15px' }}>
+                      <label style={{ display: 'block', marginBottom: '5px' }}>Owner Password *</label>
+                      <input 
+                        type="password" 
+                        value={formData.password}
+                        onChange={(e) => setFormData({...formData, password: e.target.value})}
+                        style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border)' }}
+                        required={!editingId}
+                        minLength={6}
+                      />
+                    </div>
+                  </>
+                )}
+
+                <div style={{ marginBottom: '25px', display: 'flex', alignItems: 'center', marginTop: '15px' }}>
                   <input 
                     type="checkbox" 
                     checked={formData.isActive}
@@ -240,7 +312,7 @@ const AdminRestaurantsPage = () => {
                     type="submit"
                     style={{ padding: '10px 15px', background: 'var(--primary)', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}
                   >
-                    {editingId ? 'Update' : 'Create'}
+                    {editingId ? 'Update Restaurant' : 'Create Restaurant & Owner'}
                   </button>
                 </div>
               </form>

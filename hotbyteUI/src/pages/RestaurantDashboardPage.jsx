@@ -167,8 +167,8 @@ const RestaurantDashboardPage = () => {
       await deleteMenuItem(id);
       toast.success('Menu item deleted');
       loadData();
-    } catch {
-      toast.error('Failed to delete');
+    } catch (err) {
+      toast.error(err.response?.data || 'Failed to delete');
     }
   };
 
