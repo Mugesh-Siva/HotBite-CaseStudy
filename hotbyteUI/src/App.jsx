@@ -29,6 +29,7 @@ import AdminOrdersPage from './pages/admin/AdminOrdersPage';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import OAuth2Callback from './components/auth/OAuth2Callback';
+import ForgotPassword from './components/auth/ForgotPassword';
 
 import './index.css';
 
@@ -66,6 +67,7 @@ function App() {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/menu" element={<MenuPage />} />
                 <Route path="/oauth2/callback" element={<OAuth2Callback />} />
 

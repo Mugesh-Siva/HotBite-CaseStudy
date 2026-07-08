@@ -17,6 +17,8 @@ CREATE TABLE users (
     gender VARCHAR(20),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     is_active BOOLEAN DEFAULT TRUE,
+    reset_otp VARCHAR(10),
+    reset_otp_expiry DATETIME,
     CONSTRAINT fk_users_role FOREIGN KEY (role_id) REFERENCES roles(role_id) ON DELETE RESTRICT
 );
 
